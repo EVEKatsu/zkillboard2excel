@@ -1,0 +1,106 @@
+{
+    "killmail_id" : {
+        "de": "Killmail ID",
+        "en": "Killmail ID",
+        "fr": "Killmail ID",
+        "ja": "キルメールID",
+        "ru": "Killmail ID",
+        "zh": "Killmail ID"
+    },
+    "killmail_time" : {
+        "de": "Time",
+        "en": "Time",
+        "fr": "Time",
+        "ja": "時刻",
+        "ru": "Time",
+        "zh": "Time"
+    },
+    "ship" : {
+        "de": "Ship",
+        "en": "Ship",
+        "fr": "Ship",
+        "ja": "艦名",
+        "ru": "Ship",
+        "zh": "Ship"
+    },
+    "security" : {
+        "de": "Security",
+        "en": "Security",
+        "fr": "Security",
+        "ja": "セキュリティ",
+        "ru": "Security",
+        "zh": "Security"
+    },
+    "region" : {
+        "de": "Region",
+        "en": "Region",
+        "fr": "Region",
+        "ja": "リージョン",
+        "ru": "Region",
+        "zh": "Region"
+    },
+    "system" : {
+        "de": "System",
+        "en": "System",
+        "fr": "System",
+        "ja": "システム",
+        "ru": "System",
+        "zh": "System"
+    },
+    "damage" : {
+        "de": "Damage",
+        "en": "Damage",
+        "fr": "Damage",
+        "ja": "ダメージ",
+        "ru": "Damage",
+        "zh": "Damage"
+    },
+    "value" : {
+        "de": "Value",
+        "en": "Value",
+        "fr": "Value",
+        "ja": "価格",
+        "ru": "Value",
+        "zh": "Value"
+    },
+    "points" : {
+        "de": "Points",
+        "en": "Points",
+        "fr": "Points",
+        "ja": "ポイント",
+        "ru": "Points",
+        "zh": "Points"
+    },
+    "involved" : {
+        "de": "Involved",
+        "en": "Involved",
+        "fr": "Involved",
+        "ja": "参加人数",
+        "ru": "Involved",
+        "zh": "Involved"
+    },
+    "character" : {
+        "de": "Character",
+        "en": "Character",
+        "fr": "Character",
+        "ja": "キャラクター",
+        "ru": "Character",
+        "zh": "Character"
+    },
+    "corporation" : {
+        "de": "Corporation",
+        "en": "Corporation",
+        "fr": "Corporation",
+        "ja": "コーポレーション",
+        "ru": "Corporation",
+        "zh": "Corporation"
+    },
+    "alliance" : {
+        "de": "Alliance",
+        "en": "Alliance",
+        "fr": "Alliance",
+        "ja": "アライアンス",
+        "ru": "Alliance",
+        "zh": "Alliance"
+    }
+}

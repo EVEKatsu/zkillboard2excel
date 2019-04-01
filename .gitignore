@@ -1,0 +1,10 @@
+.DS_Store
+.vscode
+.python-version
+*.xlsx
+*.csv
+__pycache__
+sde.zip
+sde/
+settings.json
+cached.json

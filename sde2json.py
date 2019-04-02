@@ -1,4 +1,4 @@
-# v1.0.0
+# v1.0.1
 import os
 import time
 import json
@@ -81,11 +81,11 @@ def get_json_by_url(url):
             print('Download: ' + url)
             with urllib.request.urlopen(url) as html:
                 data = json.loads(html.read().decode())
-            time.sleep(2)
+            time.sleep(1)
             return data
         except urllib.error.HTTPError:
             print('urllib.error.HTTPError: ' + url)
-            time.sleep(60)
+            time.sleep(30)
 
 def get_supported_names(names):
     lang_dict = OrderedDict()
@@ -300,7 +300,7 @@ def update_version(old_version):
                     zfile.extractall()
     return version
 
-def main():
+def run():
     old_version = None
     if os.path.isfile(TYPES_JSON_PATH):
         old_version = get_json_by_file(TYPES_JSON_PATH)['version']
@@ -308,8 +308,11 @@ def main():
     version = update_version(old_version)
 
     if version != old_version:
+        print('Update SDE')
         generate_types_json(version)
         generate_universes_json(version)
+    else:
+        print('SDE is the latest.')
 
 if __name__ == '__main__':
-    main()
+    run()

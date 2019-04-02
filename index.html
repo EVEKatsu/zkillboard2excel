@@ -1,0 +1,119 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <link rel="shortcut icon" href="icon.png" type="image/png" />
+    <title>zKillboard2Excel</title>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+        <span class="navbar-brand">zKillboard2Excel</span>
+            <div class="navbar-nav mr-auto"></div>
+
+            <div>
+                <button type="submit" id="stop" style="width: 150px" class="btn btn-danger">Stop</button>
+                &nbsp;
+                <button type="submit" id="export" style="width: 150px" class="btn btn-primary">Export</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container" style="margin-top: 20px">
+        <div class="form-group">
+            <label for="zKillboardUrl">zKillboard URL and languages</label>
+
+            <div class="row">
+                <div class="col-9">
+                    <input type="text" class="form-control" id="zKillboardUrl" aria-describedby="zKillboardUrlHelp" placeholder="e.g. https://zkillboard.com/character/443630591/">
+                </div>
+                <div class="col-3">
+                    <select class="form-control" id="lang" aria-describedby="zKillboardUrlHelp">
+                        <option value="en">English</option>
+                        <option value="ru">русский язык</option>
+                        <option value="zh">中文</option>
+                        <option value="de">Deutsch</option>
+                        <option value="fr">le français</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </div>
+            </div>
+
+            <small id="zKillboardUrlHelp" class="form-text text-muted"><a href="https://zkillboard.com/" target="_blank">https://zkillboard.com/</a>. Choose a language of a export file. Can use 'en', 'ru', 'zh', 'de', 'fr', 'ja'.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="filePath">File path and format</label>
+
+            <div class="row">
+                <div class="col-10">
+                    <input type="text" class="form-control" id="filepath" aria-describedby="filePathHelp" placeholder="export/export">
+                </div>
+                <div class="col-2">
+                    <select class="form-control" id="format" aria-describedby="filePathHelp">
+                        <option value="excel">.xlsx</option>
+                        <option value="csv">.csv</option>
+                    </select>
+                </div>
+            </div>
+
+            <small id="filePathHelp" class="form-text text-muted">Please input path to export file. Supported formats are Excel(.xlsx) and CSV(.csv)</small>
+        </div>
+
+        <div class="form-group">
+            <label>Options</label>
+
+            <div class="row">
+                <div class="col-3 ">
+                    <div class="form-inline">
+                        <label class="form-check-label" for="page">Page:&nbsp;</label>
+                        <input style="width: 50%" type="text" class="form-control" id="page" aria-describedby="optionsHelp" placeholder="1">
+                    </div>
+                </div>
+
+                <div class="col-3">
+                    <div class="form-inline">
+                        <label class="form-check-label" for="limit">Limit:&nbsp;</label>
+                        <input style="width: 50%" type="text" class="form-control" id="limit" aria-describedby="optionsHelp" placeholder="1">
+                    </div>
+                </div>
+
+                <div class="col-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="clearCache" aria-describedby="optionsHelp">
+                        <label class="form-check-label" for="clearCache">Clear cache</label>
+                    </div>
+                </div>
+
+                <div class="col-3 d-flex align-items-center">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="updateSde" aria-describedby="optionsHelp">
+                        <label class="form-check-label" for="updateSde">Update SDE</label>
+                    </div>
+                </div>
+            </div>
+            
+            <small id="optionsHelp" class="form-text text-muted">'Page' - Start page of zKillboard API. 'Limit' - Number of pages read. 200 killmails per page.</small>
+        </div>
+          
+        <div class="form-group">
+            <textarea class="form-control" id="consoleLog" rows="6" readonly placeholder="Console log"></textarea>
+        </div>
+    </div>
+</body>
+
+<script>
+    require('./eventer.js')
+</script>
+
+</html>

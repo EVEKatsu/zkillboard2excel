@@ -17,8 +17,8 @@ import sde2json
 
 
 OPTIONS = [
-    ('--lang', "The language of a export data. Can use 'de', 'en', 'fr', 'ja', 'ru', 'zh'. default: 'en'"),
-    ('--filepath', 'Filepath to export. default: export'),
+    ('--lang', "The language of a export file. Can use 'de', 'en', 'fr', 'ja', 'ru', 'zh'. default: 'en'"),
+    ('--filepath', 'Path to export file. default: export/export'),
     ('--format', "File format to export. Can use 'excel' or 'csv'. default: excel"),
     ('--clear-cache', 'Finally, clear the cache. default: False'),
     ('--update-sde', 'Check for SDE Updates. default: False'),
@@ -43,7 +43,7 @@ SETTINGS_JSON_PATH = 'settings.json'
 DEFAULT_SETTINGS = {
     'zkb_url': '',
     'lang': 'en',
-    'filepath': 'export',
+    'filepath': os.path.join('export', 'export'),
     'format': 'excel',
     'clear-cache': False,
     'update-sde': False,
@@ -103,7 +103,11 @@ def get_json_by_file(path):
 
 SETTINGS = copy.deepcopy(DEFAULT_SETTINGS)
 if os.path.isfile(SETTINGS_JSON_PATH):
-    SETTINGS.update(get_json_by_file(SETTINGS_JSON_PATH))
+    for setting_key, setting_value in get_json_by_file(SETTINGS_JSON_PATH).items():
+        if isinstance(setting_value, str) and not setting_value:
+            continue
+
+        SETTINGS[setting_key] = setting_value
 
 CACHED = get_json_by_file(CACHED_JSON_PATH)
 if not CACHED:
@@ -122,11 +126,11 @@ def get_json_by_url(url):
             print('Download: ' + url)
             with urllib.request.urlopen(url) as html:
                 data = json.loads(html.read().decode())
-            time.sleep(2)
+            time.sleep(1)
             return data
         except urllib.error.HTTPError:
             print('urllib.error.HTTPError: ' + url)
-            time.sleep(60)
+            time.sleep(30)
 
 def get_link(target_key, target_id, name):
     url = 'https://zkillboard.com/%s/%d/' % (target_key, target_id)
@@ -374,7 +378,14 @@ def clear_cache_json():
     if os.path.isfile(CACHED_JSON_PATH):
         os.remove(CACHED_JSON_PATH)
 
-def main():
+def run():
+    dirname = os.path.dirname(SETTINGS['filepath'])
+    if not os.path.isdir(dirname):
+        os.makedirs(dirname)
+
+    if SETTINGS['update-sde']:
+        sde2json.run()
+
     if SETTINGS['format'] == 'excel':
         zkillboard2excel()
     else:
@@ -428,10 +439,7 @@ Options and arguments:''')
 
     save_settings_json()
 
-    if SETTINGS['update-sde']:
-        sde2json.main()
-
-    main()
+    run()
 
 if __name__ == '__main__':
     command_line()

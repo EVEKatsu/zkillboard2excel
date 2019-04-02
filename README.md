@@ -1,5 +1,5 @@
 ## What is it?
-The script to import zKillboard and export to Excel.
+The desktop application and python script to import zKillboard and export to Excel.
 
 ## License
 evekatsu.github.io is licensed under The Unlicense, see LICENSE.

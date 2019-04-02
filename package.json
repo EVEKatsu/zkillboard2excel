@@ -1,0 +1,25 @@
+{
+  "name": "zkillboard2excel",
+  "version": "1.0.0",
+  "description": "The application to import zKillboard and export to Excel",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/EVEKatsu/zkillboard2excel",
+  "keywords": [
+    "Electron",
+    "Python",
+    "zerorpc"
+  ],
+  "author": "fyears",
+  "license": "MIT",
+  "dependencies": {
+    "zerorpc": "git+https://github.com/fyears/zerorpc-node.git"
+  },
+  "devDependencies": {
+    "electron": "*",
+    "electron-packager": "*",
+    "electron-rebuild": "*"
+  }
+}

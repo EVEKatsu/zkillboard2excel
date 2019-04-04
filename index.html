@@ -34,10 +34,10 @@
             <label for="zKillboardUrl">zKillboard URL and languages</label>
 
             <div class="row">
-                <div class="col-9">
+                <div class="col-10">
                     <input type="text" class="form-control" id="zKillboardUrl" aria-describedby="zKillboardUrlHelp" placeholder="e.g. https://zkillboard.com/character/443630591/">
                 </div>
-                <div class="col-3">
+                <div class="col-2">
                     <select class="form-control" id="lang" aria-describedby="zKillboardUrlHelp">
                         <option value="en">English</option>
                         <option value="ru">русский язык</option>
@@ -53,11 +53,11 @@
         </div>
 
         <div class="form-group">
-            <label for="filePath">File path and format</label>
+            <label for="filePath">File name and format</label>
 
             <div class="row">
                 <div class="col-10">
-                    <input type="text" class="form-control" id="filepath" aria-describedby="filePathHelp" placeholder="export/export">
+                    <input type="text" class="form-control" id="filepath" aria-describedby="filePathHelp" placeholder="export">
                 </div>
                 <div class="col-2">
                     <select class="form-control" id="format" aria-describedby="filePathHelp">
@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <small id="filePathHelp" class="form-text text-muted">Please input path to export file. Supported formats are Excel(.xlsx) and CSV(.csv)</small>
+            <small id="filePathHelp" class="form-text text-muted">Please input name to export file that saves on the desktop. Excel is high performance and CSV is lightweight.</small>
         </div>
 
         <div class="form-group">
@@ -107,7 +107,7 @@
         </div>
           
         <div class="form-group">
-            <textarea class="form-control" id="consoleLog" rows="6" readonly placeholder="Console log"></textarea>
+            <textarea class="form-control" id="consoleLog" rows="12" readonly placeholder="Console log"></textarea>
         </div>
     </div>
 </body>

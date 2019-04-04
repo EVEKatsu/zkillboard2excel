@@ -3,104 +3,104 @@
         "de": "Killmail ID",
         "en": "Killmail ID",
         "fr": "Killmail ID",
-        "ja": "キルメールID",
+        "ja": "\u30ad\u30eb\u30e1\u30fc\u30ebID",
         "ru": "Killmail ID",
         "zh": "Killmail ID"
     },
     "killmail_time" : {
-        "de": "Time",
+        "de": "Zeit",
         "en": "Time",
-        "fr": "Time",
-        "ja": "時刻",
-        "ru": "Time",
-        "zh": "Time"
+        "fr": "Temps",
+        "ja": "\u6642\u523b",
+        "ru": "\u0412\u0440\u0435\u043c\u044f",
+        "zh": "\u65f6\u95f4"
     },
     "ship" : {
-        "de": "Ship",
+        "de": "Schiff",
         "en": "Ship",
-        "fr": "Ship",
-        "ja": "艦名",
-        "ru": "Ship",
-        "zh": "Ship"
+        "fr": "Vaisseau",
+        "ja": "\u8266\u540d",
+        "ru": "\u041a\u043e\u0440\u0430\u0431\u043b\u044c",
+        "zh": "\u8230\u8239"
     },
     "security" : {
-        "de": "Security",
+        "de": "Sicherheit",
         "en": "Security",
-        "fr": "Security",
-        "ja": "セキュリティ",
-        "ru": "Security",
-        "zh": "Security"
+        "fr": "S\u00e9curit\u00e9",
+        "ja": "\u30bb\u30ad\u30e5\u30ea\u30c6\u30a3",
+        "ru": "\u0411\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u043e\u0441\u0442\u044c",
+        "zh": "\u5b89\u5168"
     },
     "region" : {
         "de": "Region",
         "en": "Region",
-        "fr": "Region",
-        "ja": "リージョン",
-        "ru": "Region",
-        "zh": "Region"
+        "fr": "R\u00e9gion",
+        "ja": "\u30ea\u30fc\u30b8\u30e7\u30f3",
+        "ru": "\u041e\u0431\u043b\u0430\u0441\u0442\u044c",
+        "zh": "\u533a\u57df"
     },
     "system" : {
         "de": "System",
         "en": "System",
-        "fr": "System",
-        "ja": "システム",
-        "ru": "System",
-        "zh": "System"
+        "fr": "Syst\u00e8me",
+        "ja": "\u30b7\u30b9\u30c6\u30e0",
+        "ru": "\u0441\u0438\u0441\u0442\u0435\u043c\u0430",
+        "zh": "\u592a\u9633\u7cfb"
     },
     "damage" : {
-        "de": "Damage",
+        "de": "Besch\u00e4digung",
         "en": "Damage",
-        "fr": "Damage",
-        "ja": "ダメージ",
-        "ru": "Damage",
-        "zh": "Damage"
+        "fr": "Dommage",
+        "ja": "\u30c0\u30e1\u30fc\u30b8",
+        "ru": "\u041f\u043e\u0432\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u0435",
+        "zh": "\u635f\u4f24"
     },
     "value" : {
-        "de": "Value",
+        "de": "Wert",
         "en": "Value",
-        "fr": "Value",
-        "ja": "価格",
-        "ru": "Value",
-        "zh": "Value"
+        "fr": "Valeur",
+        "ja": "\u4fa1\u683c",
+        "ru": "\u041f\u043e\u0432\u0440\u0435\u0436\u0434\u0435\u043d\u0438\u0435",
+        "zh": "\u4ef7\u683c"
     },
     "points" : {
-        "de": "Points",
+        "de": "Punkte",
         "en": "Points",
         "fr": "Points",
-        "ja": "ポイント",
-        "ru": "Points",
-        "zh": "Points"
+        "ja": "\u30dd\u30a4\u30f3\u30c8",
+        "ru": "\u0422\u043e\u0447\u043a\u0438",
+        "zh": "\u70b9"
     },
     "involved" : {
-        "de": "Involved",
+        "de": "Beteiligt",
         "en": "Involved",
-        "fr": "Involved",
-        "ja": "参加人数",
-        "ru": "Involved",
-        "zh": "Involved"
+        "fr": "Impliqu\u00e9",
+        "ja": "\u53c2\u52a0\u4eba\u6570",
+        "ru": "\u0423\u0447\u0430\u0441\u0442\u0432\u0443\u0435\u0442",
+        "zh": "\u53c2\u4e0e"
     },
     "character" : {
-        "de": "Character",
+        "de": "Charakter",
         "en": "Character",
-        "fr": "Character",
-        "ja": "キャラクター",
-        "ru": "Character",
-        "zh": "Character"
+        "fr": "Personnage",
+        "ja": "\u30ad\u30e3\u30e9\u30af\u30bf\u30fc",
+        "ru": "\u0441\u0438\u043c\u0432\u043e\u043b",
+        "zh": "\u64ad\u653e\u673a"
     },
     "corporation" : {
-        "de": "Corporation",
+        "de": "Konzern",
         "en": "Corporation",
-        "fr": "Corporation",
-        "ja": "コーポレーション",
-        "ru": "Corporation",
-        "zh": "Corporation"
+        "fr": "soci\u00e9t\u00e9",
+        "ja": "\u30b3\u30fc\u30dd\u30ec\u30fc\u30b7\u30e7\u30f3",
+        "ru": "\u043a\u043e\u0440\u043f\u043e\u0440\u0430\u0446\u0438\u044f",
+        "zh": "\u516c\u53f8"
     },
     "alliance" : {
-        "de": "Alliance",
+        "de": "Allianz",
         "en": "Alliance",
         "fr": "Alliance",
-        "ja": "アライアンス",
-        "ru": "Alliance",
-        "zh": "Alliance"
+        "ja": "\u30a2\u30e9\u30a4\u30a2\u30f3\u30b9",
+        "ru": "\u0441\u043e\u044e\u0437",
+        "zh": "\u8054\u76df"
     }
 }

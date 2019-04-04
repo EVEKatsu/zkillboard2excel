@@ -1,4 +1,4 @@
-# v1.0.1
+# v1.1.0
 import os
 import time
 import json
@@ -22,9 +22,11 @@ LANGUAGES = [
     'zh',
 ]
 
-TYPES_JSON_PATH = os.path.join('.', 'types.json')
+RESOURCES_PATH = '.'
 
-UNIVERSES_JSON_PATH = os.path.join('.', 'universes.json')
+TYPES_JSON_PATH = 'types.json'
+
+UNIVERSES_JSON_PATH = 'universes.json'
 UNIVERSE_IDS = OrderedDict(
     eve=1,
     wormhole=2,
@@ -68,6 +70,12 @@ DEFAULT_UNIVERSES['4'] = OrderedDict(
     ru='penalty',
     zh='penalty',
 )
+
+def full_types_json_path():
+    return os.path.join(RESOURCES_PATH, TYPES_JSON_PATH)
+
+def full_universes_json_path():
+    return os.path.join(RESOURCES_PATH, UNIVERSES_JSON_PATH)
 
 def get_json_by_file(path):
     if os.path.isfile(path):
@@ -114,7 +122,7 @@ def get_supported_names_by_esi(target_type, target_id, default_name):
     return get_supported_names(names)
 
 def generate_types_json(version):
-    print('Create: ' + TYPES_JSON_PATH)
+    print('Create: ' + full_types_json_path())
 
     # # Only categories to which the killmail is issued.
     # include_category_ids = [
@@ -183,11 +191,11 @@ def generate_types_json(version):
             types['types'][i] = get_supported_names(items['name'])
             types['types'][i]['group_id'] = items['groupID']
 
-    with open(TYPES_JSON_PATH, 'w', encoding='utf-8') as file:
+    with open(full_types_json_path(), 'w', encoding='utf-8') as file:
         json.dump(types, file, indent=4)
 
 def generate_universes_json(version):
-    print('Create: ' + UNIVERSES_JSON_PATH)
+    print('Create: ' + full_universes_json_path())
 
     level_items = [
         # level_name, level_id_name, level_filename, parent_level_id_name, level_included_keys
@@ -206,7 +214,7 @@ def generate_universes_json(version):
 
     universes['universes'] = copy.deepcopy(DEFAULT_UNIVERSES)
 
-    cached_universes = get_json_by_file(UNIVERSES_JSON_PATH)
+    cached_universes = get_json_by_file(full_universes_json_path())
     if not cached_universes:
         cached_universes = {
             'regions': {},
@@ -259,7 +267,7 @@ def generate_universes_json(version):
         if os.path.isdir(recursive_path):
             recursive(0, UNIVERSE_IDS[universe_name], recursive_path)
 
-    with open(UNIVERSES_JSON_PATH, 'w', encoding='utf-8') as file:
+    with open(full_universes_json_path(), 'w', encoding='utf-8') as file:
         json.dump(universes, file, indent=4)
 
 def update_version(old_version):
@@ -300,10 +308,13 @@ def update_version(old_version):
                     zfile.extractall()
     return version
 
-def run():
+def run(resources_path='.'):
+    global RESOURCES_PATH
+    RESOURCES_PATH = resources_path
+
     old_version = None
-    if os.path.isfile(TYPES_JSON_PATH):
-        old_version = get_json_by_file(TYPES_JSON_PATH)['version']
+    if os.path.isfile(full_types_json_path()):
+        old_version = get_json_by_file(full_types_json_path())['version']
 
     version = update_version(old_version)
 
@@ -312,7 +323,7 @@ def run():
         generate_types_json(version)
         generate_universes_json(version)
     else:
-        print('SDE is the latest.')
+        print('SDE is the latest version.')
 
 if __name__ == '__main__':
     run()

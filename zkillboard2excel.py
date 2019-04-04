@@ -8,7 +8,6 @@ import copy
 import urllib.error
 import urllib.request
 import urllib.parse
-import distutils.util
 from collections import OrderedDict
 
 import openpyxl
@@ -18,7 +17,7 @@ import sde2json
 
 OPTIONS = [
     ('--lang', "The language of a export file. Can use 'de', 'en', 'fr', 'ja', 'ru', 'zh'. default: 'en'"),
-    ('--filepath', 'Path to export file. default: export/export'),
+    ('--filepath', 'Path after desktop to export file. default: export'),
     ('--format', "File format to export. Can use 'excel' or 'csv'. default: excel"),
     ('--clear-cache', 'Finally, clear the cache. default: False'),
     ('--update-sde', 'Check for SDE Updates. default: False'),
@@ -43,7 +42,7 @@ SETTINGS_JSON_PATH = 'settings.json'
 DEFAULT_SETTINGS = {
     'zkb_url': '',
     'lang': 'en',
-    'filepath': os.path.join('export', 'export'),
+    'filepath': 'export',
     'format': 'excel',
     'clear-cache': False,
     'update-sde': False,
@@ -95,30 +94,56 @@ FOCUS_KEYS = [
     'group',
 ]
 
+SETTINGS = copy.deepcopy(DEFAULT_SETTINGS)
+CACHED = {}
+TYPES = {}
+UNIVERSES = {}
+LOCALE_MENUITEMS = {}
+
+def full_types_json_path():
+    return os.path.join(SETTINGS['resources_path'], TYPES_JSON_PATH)
+
+def full_universes_json_path():
+    return os.path.join(SETTINGS['resources_path'], UNIVERSES_JSON_PATH)
+
+def full_setting_json_path():
+    if 'resources_path' in SETTINGS:
+        path = SETTINGS['resources_path']
+    else:
+        path = '.'
+
+    return os.path.join(path, SETTINGS_JSON_PATH)
+
+def full_cached_json_path():
+    return os.path.join(SETTINGS['resources_path'], CACHED_JSON_PATH)
+
+def full_locale_menuitems_json_path():
+    return os.path.join(SETTINGS['resources_path'], LOCALE_MENUITEMS_JSON_PATH)
+
+def initialize():
+    if os.path.isfile(full_setting_json_path()):
+        for setting_key, setting_value in get_json_by_file(full_setting_json_path()).items():
+            if isinstance(setting_value, str) and not setting_value:
+                continue
+
+            SETTINGS[setting_key] = setting_value
+
+    CACHED.update(get_json_by_file(full_cached_json_path()))
+    if not CACHED:
+        for cached_key in CACHED_KEYS:
+            CACHED[cached_key] = {}
+
+    TYPES.update(get_json_by_file(full_types_json_path()))
+
+    UNIVERSES.update(get_json_by_file(full_universes_json_path()))
+
+    LOCALE_MENUITEMS.update(get_json_by_file(full_locale_menuitems_json_path()))
+
 def get_json_by_file(path):
     if os.path.isfile(path):
         with open(path, 'r') as file:
             return json.load(file)
     return {}
-
-SETTINGS = copy.deepcopy(DEFAULT_SETTINGS)
-if os.path.isfile(SETTINGS_JSON_PATH):
-    for setting_key, setting_value in get_json_by_file(SETTINGS_JSON_PATH).items():
-        if isinstance(setting_value, str) and not setting_value:
-            continue
-
-        SETTINGS[setting_key] = setting_value
-
-CACHED = get_json_by_file(CACHED_JSON_PATH)
-if not CACHED:
-    for cached_key in CACHED_KEYS:
-        CACHED[cached_key] = {}
-
-TYPES = get_json_by_file(TYPES_JSON_PATH)
-
-UNIVERSES = get_json_by_file(UNIVERSES_JSON_PATH)
-
-LOCALE_MENUITEMS = get_json_by_file(LOCALE_MENUITEMS_JSON_PATH)
 
 def get_json_by_url(url):
     while(True):
@@ -319,7 +344,7 @@ def get_killmails():
 def zkillboard2csv():
     killmails, header, focus_key, focus_id = get_killmails()
 
-    with open(SETTINGS['filepath'] + '.csv', 'w') as file:
+    with open(SETTINGS['fullpath'] + '.csv', 'w') as file:
         writer = csv.writer(file, lineterminator='\n')
         writer.writerow(header)
         writer.writerows(killmails.values())
@@ -364,27 +389,33 @@ def zkillboard2excel():
 
         row += 1
 
-    wb.save(SETTINGS['filepath'] + '.xlsx')
+    wb.save(SETTINGS['fullpath'] + '.xlsx')
 
 def save_settings_json():
-    with open(SETTINGS_JSON_PATH, 'w', encoding='utf-8') as file:
+    with open(full_setting_json_path(), 'w', encoding='utf-8') as file:
         json.dump(SETTINGS, file, indent=4)
 
 def save_cache_json():
-    with open(CACHED_JSON_PATH, 'w', encoding='utf-8') as file:
+    with open(full_cached_json_path(), 'w', encoding='utf-8') as file:
         json.dump(CACHED, file)
 
 def clear_cache_json():
-    if os.path.isfile(CACHED_JSON_PATH):
-        os.remove(CACHED_JSON_PATH)
+    if os.path.isfile(full_cached_json_path()):
+        os.remove(full_cached_json_path())
 
-def run():
-    dirname = os.path.dirname(SETTINGS['filepath'])
+def run(resources_path='.'):
+    SETTINGS['resources_path'] = resources_path
+
+    initialize()
+
+    SETTINGS['fullpath'] = os.path.join(os.path.expanduser('~/Desktop/'), SETTINGS['filepath'])
+
+    dirname = os.path.dirname(SETTINGS['fullpath'])
     if not os.path.isdir(dirname):
         os.makedirs(dirname)
 
     if SETTINGS['update-sde']:
-        sde2json.run()
+        sde2json.run(resources_path)
 
     if SETTINGS['format'] == 'excel':
         zkillboard2excel()
@@ -393,6 +424,7 @@ def run():
 
     if SETTINGS['clear-cache']:
         clear_cache_json()
+
 
 def command_line():
     if len(sys.argv) < 2:
@@ -425,9 +457,9 @@ Options and arguments:''')
                     else:
                         print("Does not support '%s' format" % value)
                 elif key == '--clear-cache':
-                    SETTINGS['clear-cache'] = bool(distutils.util.strtobool(value))
+                    SETTINGS['clear-cache'] = value.lower() == 'true'
                 elif key == '--update-sde':
-                    SETTINGS['update-sde'] = bool(distutils.util.strtobool(value))
+                    SETTINGS['update-sde'] = value.lower() == 'true'
                 elif key == '--page':
                     SETTINGS['page'] = int(value)
                 elif key == '--limit':

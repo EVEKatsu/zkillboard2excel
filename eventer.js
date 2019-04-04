@@ -3,31 +3,7 @@ const path = require("path")
 
 const zerorpc = require("zerorpc")
 
-
-const PYTHON_DIST_PATH = "dist"
-const PYTHON_MODULE = "api"
-
-const SETTINGS_JSON_PATH = "settings.json"
-
-let pythonProcess = null
-
-const consoleLog = (text) => {
-  const consoleLog = document.querySelector("#consoleLog")
-  consoleLog.innerHTML += text + "&#13;"
-  consoleLog.scrollTop = consoleLog.scrollHeight
-}
-
-const server = new zerorpc.Server({
-  log: function(text, reply) {
-    consoleLog(text)
-    reply(null)
-  },
-  exit: function(reply) {
-    exitPythonProcess()
-    reply(null)
-  }
-})
-server.bind("tcp://0.0.0.0:4242")
+const SETTINGS_JSON_PATH = path.join(__dirname, "settings.json")
 
 if (fs.existsSync(SETTINGS_JSON_PATH)) {
   const settings = JSON.parse(fs.readFileSync(SETTINGS_JSON_PATH, "utf8"))
@@ -45,47 +21,35 @@ if (fs.existsSync(SETTINGS_JSON_PATH)) {
   e("limit").value = settings["limit"]
 }
 
-const guessPackaged = () => {
-  return fs.existsSync(path.join(__dirname, PYTHON_DIST_PATH))
+let client = new zerorpc.Client()
+client.connect("tcp://127.0.0.1:4242")
+client.invoke("echo", "server ready", (error, res) => {
+  if(error || res !== 'server ready') {
+    console.error(error)
+  } else {
+    console.log("server is ready")
+  }
+})
+
+const consoleLog = (text) => {
+  if (text) {
+    const textarea = document.querySelector("#consoleLog")
+    textarea.innerHTML += text + '&#13;'
+    textarea.scrollTop = textarea.scrollHeight
+  } 
 }
 
-const getScriptPath = () => {
-  if (guessPackaged()) {
-    if (process.platform === "win32") {
-      return path.join(__dirname, PYTHON_DIST_PATH, PYTHON_MODULE, PYTHON_MODULE + ".exe")
+setInterval(function() {
+  client.invoke("log", (error, res) => {
+    if(error) {
+      console.error(error)
     } else {
-      return path.join(__dirname, PYTHON_DIST_PATH, PYTHON_MODULE, PYTHON_MODULE)
+      consoleLog(res)
     }
-  } else {
-    return path.join(__dirname, PYTHON_MODULE + ".py")
-  }
-}
-
-const createPythonProcess = () => {
-  const scriptPath = getScriptPath()
-
-  if (guessPackaged()) {
-    pythonProcess = require("child_process").execFile(scriptPath)
-  } else {
-    pythonProcess = require("child_process").spawn("python", [scriptPath])
-  }
-
-  if (pythonProcess != null) {
-    console.log("child process success")
-  }
-}
-
-const exitPythonProcess = () => {
-  pythonProcess.kill()
-  pythonProcess = null
-}
+  })
+}, 1000)
 
 document.querySelector("#export").addEventListener("click", () => {
-  if (pythonProcess !== null) {
-    consoleLog('The script is already running.')
-    return
-  }
-
   const value = (name) => {
     return document.querySelector("#" + name).value
   }
@@ -111,10 +75,9 @@ document.querySelector("#export").addEventListener("click", () => {
     }, undefined, "    ")
   )
 
-  createPythonProcess()
+  client.invoke("export")
 })
 
 document.querySelector("#stop").addEventListener("click", () => {
-  exitPythonProcess()
-  consoleLog("Stop")
+  client.invoke("terminate")
 })

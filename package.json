@@ -12,8 +12,8 @@
     "Python",
     "zerorpc"
   ],
-  "author": "fyears",
-  "license": "MIT",
+  "author": "Omochin",
+  "license": "The Unlicense",
   "dependencies": {
     "zerorpc": "git+https://github.com/fyears/zerorpc-node.git"
   },

@@ -59,7 +59,7 @@ app.on("will-quit", exitPythonProcess)
 let mainWindow = null
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({width: 1024, height: 768})
+  mainWindow = new BrowserWindow({width: 800, height: 600})
   mainWindow.setTitle("zKillboard2Excel")
   mainWindow.setMenu(null)
   mainWindow.loadURL(require("url").format({

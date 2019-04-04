@@ -128,16 +128,30 @@ def initialize():
 
             SETTINGS[setting_key] = setting_value
 
-    CACHED.update(get_json_by_file(full_cached_json_path()))
+    if SETTINGS['update-sde']:
+        sde2json.update_from_processed(
+            types_json_url='https://raw.githubusercontent.com/EVEKatsu/zkillboard2excel/master/types.json',
+            universes_json_url='https://raw.githubusercontent.com/EVEKatsu/zkillboard2excel/master/universes.json',
+            resources_path=SETTINGS['resources_path'],
+        )
+
+    if SETTINGS['clear-cache']:
+        CACHED.clear()
+    elif not CACHED:
+        CACHED.update(get_json_by_file(full_cached_json_path()))
+
     if not CACHED:
         for cached_key in CACHED_KEYS:
             CACHED[cached_key] = {}
 
-    TYPES.update(get_json_by_file(full_types_json_path()))
+    if not TYPES:
+        TYPES.update(get_json_by_file(full_types_json_path()))
 
-    UNIVERSES.update(get_json_by_file(full_universes_json_path()))
+    if not UNIVERSES:
+        UNIVERSES.update(get_json_by_file(full_universes_json_path()))
 
-    LOCALE_MENUITEMS.update(get_json_by_file(full_locale_menuitems_json_path()))
+    if not LOCALE_MENUITEMS:
+        LOCALE_MENUITEMS.update(get_json_by_file(full_locale_menuitems_json_path()))
 
 def get_json_by_file(path):
     if os.path.isfile(path):
@@ -151,11 +165,11 @@ def get_json_by_url(url):
             print('Download: ' + url)
             with urllib.request.urlopen(url) as html:
                 data = json.loads(html.read().decode())
-            time.sleep(1)
+            time.sleep(0.1)
             return data
         except urllib.error.HTTPError:
             print('urllib.error.HTTPError: ' + url)
-            time.sleep(30)
+            time.sleep(10)
 
 def get_link(target_key, target_id, name):
     url = 'https://zkillboard.com/%s/%d/' % (target_key, target_id)
@@ -321,6 +335,7 @@ def get_killmails():
 
             esi_url = 'https://esi.evetech.net/latest/killmails/%d/%s/' % (zkb['killmail_id'], zkb['zkb']['hash'])
             if killmail_id_str in CACHED['killmails']:
+                print('Cached: ' + esi_url)
                 killmail = CACHED['killmails'][killmail_id_str]
             else:
                 killmail = parse_killmail(get_json_by_url(esi_url))
@@ -409,13 +424,9 @@ def run(resources_path='.'):
     initialize()
 
     SETTINGS['fullpath'] = os.path.join(os.path.expanduser('~/Desktop/'), SETTINGS['filepath'])
-
     dirname = os.path.dirname(SETTINGS['fullpath'])
     if not os.path.isdir(dirname):
         os.makedirs(dirname)
-
-    if SETTINGS['update-sde']:
-        sde2json.run(resources_path)
 
     if SETTINGS['format'] == 'excel':
         zkillboard2excel()

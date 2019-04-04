@@ -75,7 +75,15 @@ document.querySelector("#export").addEventListener("click", () => {
     }, undefined, "    ")
   )
 
-  client.invoke("export")
+  client.invoke("export", (error, res) => {
+    if(error) {
+      console.error(error)
+    } else {
+      if (res === 'start') {
+        document.querySelector("#consoleLog").innerHTML = ""
+      }
+    }
+  })
 })
 
 document.querySelector("#stop").addEventListener("click", () => {

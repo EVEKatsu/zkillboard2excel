@@ -1,4 +1,4 @@
-# v1.1.0
+# v1.2.0
 import os
 import time
 import json
@@ -77,6 +77,15 @@ def full_types_json_path():
 def full_universes_json_path():
     return os.path.join(RESOURCES_PATH, UNIVERSES_JSON_PATH)
 
+def initialize(resources_path='.'):
+    global RESOURCES_PATH
+    RESOURCES_PATH = resources_path
+
+    if os.path.isfile(full_universes_json_path()):
+        return get_json_by_file(full_universes_json_path())['version']
+
+    return None
+
 def get_json_by_file(path):
     if os.path.isfile(path):
         with open(path, 'r') as file:
@@ -89,11 +98,11 @@ def get_json_by_url(url):
             print('Download: ' + url)
             with urllib.request.urlopen(url) as html:
                 data = json.loads(html.read().decode())
-            time.sleep(1)
+            time.sleep(0.1)
             return data
         except urllib.error.HTTPError:
             print('urllib.error.HTTPError: ' + url)
-            time.sleep(30)
+            time.sleep(10)
 
 def get_supported_names(names):
     lang_dict = OrderedDict()
@@ -159,7 +168,7 @@ def generate_types_json(version):
     ]
 
     include_group_ids = []
-    base_path = os.path.join('.', 'sde', 'fsd')
+    base_path = os.path.join(RESOURCES_PATH, 'sde', 'fsd')
 
     types = OrderedDict()
     types['version'] = version
@@ -258,10 +267,10 @@ def generate_universes_json(version):
                 for key in level_included_keys:
                     universes[level_name][universe_id_str][key] = values[key]
 
-            if nest <= -1:
+            if nest < len(level_items):
                 recursive(nest + 1, universe_id, next_path)
 
-    base_path = os.path.join('.', 'sde', 'fsd', 'universe')
+    base_path = os.path.join(RESOURCES_PATH, 'sde', 'fsd', 'universe')
     for universe_name in os.listdir(base_path):
         recursive_path = os.path.join(base_path, universe_name)
         if os.path.isdir(recursive_path):
@@ -270,7 +279,7 @@ def generate_universes_json(version):
     with open(full_universes_json_path(), 'w', encoding='utf-8') as file:
         json.dump(universes, file, indent=4)
 
-def update_version(old_version):
+def update_resources(old_version):
     resources_url = 'https://developers.eveonline.com/resource/resources'
 
     while(True):
@@ -294,36 +303,53 @@ def update_version(old_version):
                     print('Cached: ' + sde_url)
                     break
 
+                print("Update SDE to '%s'" % version)
+                full_sde_path = os.path.join(RESOURCES_PATH, 'sde.zip')
+
                 while(True):
                     try:
                         print('Download: ' + sde_url)
                         with urllib.request.urlopen(sde_url) as data:
-                            with open('sde.zip', mode='wb') as file:
+                            with open(full_sde_path, mode='wb') as file:
                                 file.write(data.read())
                         break
                     except urllib.error.HTTPError:
                         print('urllib.error.HTTPError: ' + sde_url)
 
-                with zipfile.ZipFile('sde.zip') as zfile:
+                print('Extract: ' + full_sde_path)
+                with zipfile.ZipFile(full_sde_path) as zfile:
                     zfile.extractall()
     return version
 
-def run(resources_path='.'):
-    global RESOURCES_PATH
-    RESOURCES_PATH = resources_path
+def update_from_processed(types_json_url, universes_json_url, resources_path='.'):
+    old_version = initialize(resources_path)
 
-    old_version = None
-    if os.path.isfile(full_types_json_path()):
-        old_version = get_json_by_file(full_types_json_path())['version']
-
-    version = update_version(old_version)
+    universes = get_json_by_url(universes_json_url)
+    version = universes['version']
 
     if version != old_version:
-        print('Update SDE')
+        print("Update SDE to '%s'" % version)
+        types = get_json_by_url(types_json_url)
+
+        with open(full_types_json_path(), 'w', encoding='utf-8') as file:
+            json.dump(types, file, indent=4)
+
+        with open(full_universes_json_path(), 'w', encoding='utf-8') as file:
+            json.dump(universes, file, indent=4)
+    else:
+        print('SDE is the latest version(%s).' % version)
+
+def update_from_developers(resources_path='.'):
+    old_version = initialize(resources_path)
+
+    version = update_resources(old_version)
+
+    if version != old_version:
+        print('Update SDE to ' + version)
         generate_types_json(version)
         generate_universes_json(version)
     else:
-        print('SDE is the latest version.')
+        print('SDE is the latest version(%s).' % version)
 
 if __name__ == '__main__':
-    run()
+    update_from_developers()

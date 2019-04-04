@@ -87,17 +87,25 @@ class Api:
         builtins.print = self._append
 
     def _append(self, text):
-        self._texts.append(str(text))
+        s = str(text)
+        if not s.startswith('Cached:'):
+            s = s.replace('Download:', '').strip()
+            if s.startswith('https://raw.githubusercontent.com'):
+                return
+
+            s = s.replace('https://zkillboard.com/api', 'zkb: ')
+            s = s.replace('https://esi.evetech.net/latest', 'esi: ')
+            self._texts.append(s)
 
     def export(self):
         if self._script:
             self._append('The script is already running.')
+            return 'running'
         else:
             self._script = ThreadWithExc(target=zkillboard2excel.run, args=(self._resources_path,))
             self._script.start()
             self._append('Start')
-
-        return 'export'
+            return 'start'
 
     def terminate(self):
         if self._script:
